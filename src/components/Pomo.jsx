@@ -1,7 +1,6 @@
-import './Pomo.scss';
 import CircularProgress from '@/utils/CircularProgress';
-
 import { useState, useEffect, useRef } from 'react';
+import './Pomo.scss';
 
 const Pomo = () => {
     const [ TimerStart, TimerStop] = ["Start","Pause"]
@@ -55,7 +54,12 @@ const handleTaskInput=(e)=>{
   return (
     <div className="pomo__wrapper">
         <div className="pomo__display">
-        <CircularProgress className="pomo__circular" time={timer} initialTime={timer} size={400} strokeWidth={50}></CircularProgress>
+        <CircularProgress className="pomo__circular" 
+          timer={timer} 
+          timeInput={timeInput} 
+          size={400} 
+          strokeWidth={50}>
+          </CircularProgress>
         <h2 className="pomo__task">{taskInput || "Time to focus!"}</h2>
         </div>
         
@@ -92,7 +96,10 @@ const handleTaskInput=(e)=>{
           }}
           disabled={timerSwitch}
           />
-          <button onClick={handleTaskInput} disabled={timerSwitch}>Add task</button>
+          <button 
+          type="submit"
+          onClick={handleTaskInput} 
+          disabled={timerSwitch}>Add task</button>
           </form>
       </div>
     </div>

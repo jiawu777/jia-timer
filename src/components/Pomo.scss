@@ -7,7 +7,6 @@
       flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
-      gap: 50px 0px;
   
     }
   
@@ -31,8 +30,7 @@
     &__btn {
       display: flex;
       flex-flow: row nowrap;
-      font-size: 5rem;
-      
+      font-size: 3rem;
       border-radius: 20px;
 
       @include pad{
