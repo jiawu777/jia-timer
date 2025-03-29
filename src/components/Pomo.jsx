@@ -1,6 +1,5 @@
 import './Pomo.scss';
 import CircularProgress from '@/utils/CircularProgress';
-import TaskForm from '@/hooks/inputForm';
 
 import { useState, useEffect, useRef } from 'react';
 
@@ -39,15 +38,16 @@ const Pomo = () => {
     return () => clearInterval(intervalIdTimer.current);
   }, [timerSwitch, timer]);
 
-  // const resetTimer = () => {
-  //   clearInterval(intervalIdTimer.current);
-  //   setTimer(minInput*60)
-  //   setTimerSwitch(false);
-  // };
+  const resetTimer = () => {
+    clearInterval(intervalIdTimer.current);
+    setTimer(timeInput)
+    setTimerSwitch(false);
+  };
 
 // input time & task
 const handleTaskInput=(e)=>{
   e.preventDefault()
+  clearInterval(intervalIdTimer.current);
   setTimer(timeInput)
   setTimerSwitch(false)
 }
@@ -67,47 +67,33 @@ const handleTaskInput=(e)=>{
             {timerSwitch ? TimerStop : TimerStart}
           </button>
           
-          {/* <button
-            className="timer__btn timer__btn--reset"
+          <button
+            className={`pomo__btn ${timerSwitch? "pomo__btn--skip":"pomo__btn--hide"}`}
             onClick={resetTimer}
           >
-            {TimerReset}
-          </button> */}
+            SKIP
+          </button>
         </div>
-      <div className="task__wrapper">
-        <div className="task__timeInput">
-          <form action="">
-          <input type="number"
+      <div className="pomo__input">
+          <form className="pomo__form">
+          <input className="pomo__form pomo__form--time" 
+          type="number"
           onChange={(e)=>{
             let secInput = Number(e.target.value)*60
             setTimeInput(secInput)
           }}
           disabled = { timerSwitch ? true : false }
           />
-
-          <input type="text"
+          <input className="pomo__form pomo__form--task" 
+          type="text"
           onChange={(e)=>{
             let taskInput = e.target.value
             setTaskInput(taskInput)
           }}
           disabled={timerSwitch}
           />
-          <button onClick={handleTaskInput} disabled={timerSwitch}>設定任務</button>
+          <button onClick={handleTaskInput} disabled={timerSwitch}>Add task</button>
           </form>
-        {/* <input type="number" disabled=""
-        onChange={e=> 
-          {
-            
-            minInput=Number(e.target.value)*60
-            setTimer(minInput)}
-        }
-        />
-        {min} */}
-        {/* <button
-        onClick={
-          ()=>{
-            setTimer((minInput)=>minInput+5)}}>加5分鐘</button> */}
-        </div>
       </div>
     </div>
   );

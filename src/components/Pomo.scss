@@ -31,10 +31,10 @@
     &__btn {
       display: flex;
       flex-flow: row nowrap;
-      gap: 0px 50px;
       font-size: 5rem;
-      background-color: green;
+      
       border-radius: 20px;
+
       @include pad{
         font-size: 4rem;
       }
@@ -43,8 +43,24 @@
         font-size: 2rem;
         gap: 0px 20px;
       }
+
+      &--start{
+        background-color: green;
+      }
+
       &--pause{
         background-color: red;
+      }
+
+      &--skip{
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        color: black;
+        background-color: white;
+      }
+      &--hide{
+        display: none;
       }
     }
   }
