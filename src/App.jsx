@@ -1,11 +1,7 @@
-
-import Pomo from '@/components/Pomo'
+import Pomo from '@/components/Pomo';
 
 const App = () => {
-  return (
-  <Pomo/>
-
-)
+  return <Pomo />;
 };
 
 export default App;

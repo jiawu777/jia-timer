@@ -3,7 +3,7 @@
       width: 100vw;
       height: 100vh;
       background-color: white;
-      display: flex;
+display: flex;
       flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
@@ -32,10 +32,6 @@
       flex-flow: row nowrap;
       font-size: 3rem;
       border-radius: 20px;
-
-      @include pad{
-        font-size: 4rem;
-      }
   
       @include mobile{
         font-size: 2rem;
