@@ -5,13 +5,16 @@ import './Pomo.scss';
 const Pomo = () => {
   // Config
   const [TimerStart, TimerStop, TimerSkip] = ['Start', 'Pause','Skip'];
-  const [CircularSize,CircularStrokeWidth] = [400, 50] 
+  const [CircularSize,CircularStrokeWidth] = [400, 50];
+  const [addTaskBtn ,delBtn] = ["Add task","del"];
+  const defaultTask = " Time to focus! ";
+  const defaultTime = 25;
   
   // Timer Switch
   const [timerSwitch, setTimerSwitch] = useState(false);
   
   // timing
-  const [timer, setTimer] = useState(0);
+  const [timer, setTimer] = useState(defaultTime*60);
   const intervalIdTimer = useRef(null);
 
   // forceUpdate
@@ -21,7 +24,7 @@ const Pomo = () => {
   // setInput
   const timeInputRef = useRef(null)
   const taskInputRef = useRef(null)
-  const defaultTime = 25
+
 
   // get UserInfo
   const userInfoRef = useRef(
@@ -29,7 +32,7 @@ const Pomo = () => {
   )
   
 // taskId
-  const [taskId,setTaskId]=useState(userInfoRef.current.currentTaskId);
+  const [,setTaskId]=useState(userInfoRef.current.currentTaskId);
 
   // get current task
   const currentTaskIndex = userInfoRef.current?.tasks?.findIndex(
@@ -41,7 +44,8 @@ const Pomo = () => {
 
   useEffect(()=>{
     if(currentTask){
-      setTimer(currentTask.time)
+      setTaskId(currentTask.id);
+      setTimer(currentTask.time);
     }
   },[currentTask])
 
@@ -78,18 +82,29 @@ const Pomo = () => {
     const { tasks, currentTaskId } = userInfoRef.current;
 
     if(!tasks || tasks.length === 0 ){
+      userInfoRef.current.currentTask = {defaultTask}
+      const secInput = Number(defaultTime)*60;
+      userInfoRef.current.currentTime = {secInput};
+      setTimer(secInput);
+      setTimerSwitch(false);
       console.log("No tasks available.");
+      
       return;
     }
 
     const currentIndex = tasks.findIndex((task)=>task.id === currentTaskId)
     if(currentIndex === -1){
+      userInfoRef.current.currentTask = {defaultTask}
+      const secInput = Number(defaultTime)*60;
+      userInfoRef.current.currentTime = {secInput};
+      setTimer(secInput);
+      setTimerSwitch(false);
       console.log("Current task not found.");
+
       return;
     }
 
     const nextTaskIndex = currentIndex +1;
-    console.log(userInfoRef.current)
 
     if(nextTaskIndex < tasks.length){
       const nextTask = tasks[nextTaskIndex];
@@ -105,8 +120,11 @@ const Pomo = () => {
       localStorage.setItem('userInfo',JSON.stringify(userInfoRef.current))
     }else{
       console.log("No tasks available.");
+      userInfoRef.current.currentTaskId = 0;
+      setTaskId(0)
+      setTimer(defaultTime*60);
       setTimerSwitch(false);
-      setTimer(0);
+      localStorage.setItem('userInfo',JSON.stringify(userInfoRef.current))
     }
     
   };
@@ -168,14 +186,14 @@ const Pomo = () => {
 
       return(
         <li key={`${item.id}`} className="pomo__taskListLI" >
-          <label className="pomo__taskListItem" for="pomo__taskListItem"> 
+          <label className="pomo__taskListItem"> 
             <input className="pomo__taskListItem pomo__taskListItem--radio" type="radio" name="listGroupRadio" value="" id="" 
             checked={userInfoRef.current.currentTaskId === item.id}
             onChange={()=>handleTaskSelection(item)}/>
             <div className="pomo__taskListItem pomo__taskListItem--time">{item.time/60}min</div>
             <div className="pomo__taskListItem pomo__taskListItem--task">{item.name}</div>
-            <button className="pomo__taskListItem pomo__taskListItem--closeBtn" type="button" class="btn-close" aria-label="Close"  
-            onClick={handleTaskDeletion}/>
+            <button className="pomo__btn pomo__btn--delBtn" type="button" 
+            onClick={handleTaskDeletion}>{delBtn}</button>
             </label>
         </li>
       )
@@ -184,7 +202,7 @@ const Pomo = () => {
 const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
 
   return (
-    <div className="pomo__wrapper">
+    <div className={`pomo__wrapper ${timerSwitch ? 'pomo__wrapper--start' : ''}`}>
       <div className="pomo__display">
         <CircularProgress
           className="pomo__circular"
@@ -213,15 +231,14 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
 
       </div>
 
-      <div className="pomo__input">
-      <h2 className="pomo__taskListTitle"> Task List </h2>
+      <div className={`"pomo__input" ${timerSwitch ? 'pomo__input--start' : ''}`}>
         <form className="pomo__form">
           <input
             className="pomo__input pomo__input--time"
             type="number"
             ref={timeInputRef}
             defaultValue={defaultTime}
-            disabled={timerSwitch}
+            placeholder="Enter time(min)"
             required
           />
           <input
@@ -229,17 +246,15 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
             type="text"
             ref={taskInputRef}
             placeholder="Enter task"
-            disabled={timerSwitch}
             required
           />
           <button
+            className="pomo__btn pomo__btn--addTask"
             onClick={handleTaskInput}
-            disabled={timerSwitch}
           >
-            Add task
+            {addTaskBtn}
           </button>
         </form>
-        
         <div className="pomo__taskList">
             <ul className="pomo__taskListUL">
               {child}

@@ -1,19 +1,25 @@
 .pomo {
     &__wrapper {
+      padding: 5vh 0px;
+      gap: 5vh;
       width: 100vw;
       height: auto;
-      // background-color: white;
+      background-color: #7daa87;
       display: flex;
       flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
-  
+      &--start{
+      background-color: #FE4A49;
+      }
     }
   
     &__display {
+      width: 100%;
       display: flex;
+      align-items: center;
       justify-content: center;
-      color: black;
+      color: #E6E6EA;
       flex-flow: column nowrap;
     }
 
@@ -21,41 +27,57 @@
       font-size: 20 rem;
     }
 
+    &__currentTaskName{
+      display: flex;
+      justify-content: center;
+      max-width: 50%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 2.5rem;
+      overflow: hidden;
+    }
+
     &__input{
-      max-width: 70vw;
+      max-width: 50%;
       display: flex;
       flex-flow: column wrap;
       text-align: center;
+      border-radius: 20px;
+
+      &--start{
+        display: none;
+      }
+      &--time{
+        background-color: #E6E6EA;
+        color: #4d7c57;
+      }
+      &--task{
+        background-color: #E6E6EA;
+        color: #4d7c57;
+      }
+      &::placeholder{
+        color: #4d7c57;
+      }
     }
 
     &__form{
-      display: flex;
-      gap: 5px;
-      padding: 5px;
-    }
-
-    &__currentTaskName{
       width: 100%;
       display: flex;
-      justify-content: center;
-      font-size: 2.5rem;
+      justify-content: space-around;
+      padding: 10px;
+      gap: 10px;
     }
 
     &__taskList{
-      height: auto;
-      width: 100%;
-    }
-
-    &__taskListTitle{
-      width: 100%;
       display: flex;
       justify-content: center;
+      height: auto;
     }
 
     &__taskListUL{
       display: flex;
       flex-direction: column;
-      padding: 0px;
+      padding: 0px 20px;
       margin: 0px;
       gap: 10px 0px;
     }
@@ -65,6 +87,11 @@
     }
 
     &__taskListItem{
+      width: 100%;
+      overflow: hidden;
+      font-size: 1rem;
+      font-weight: 500;
+      align-items: center;
       padding: 0px 10px;
       gap:10px 10px;
       display: flex;
@@ -81,31 +108,30 @@
       &--task{
         justify-content: center;
         flex-basis: 70%;
-      }
-      &--closeBtn{
-        justify-content: center;
-        flex-basis: 5%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     
     &__btn {
       display: flex;
       flex-flow: row nowrap;
-      font-size: 3rem;
+      font-size: 2rem;
       border-radius: 20px;
       gap: 0px 10px;
+      
   
       @include mobile{
-        font-size: 2rem;
+        font-size: 2.5rem;
         gap: 0px 20px;
       }
 
       &--start{
-        background-color: green;
         box-shadow: 0px 0px 0px 5px 
         rgba($color: #000000, $alpha: 0.1)
         inset;
-        
+        color: #7daa87;
+        background-color: #E6E6EA;
       }
 
       &--pause{
@@ -117,10 +143,23 @@
         align-items: center;
         font-size: 2rem;
         color: black;
-        background-color: white;
+        background-color: #FE4A49;
       }
       &--hide{
         display: none;
       }
+
+      &--delBtn{
+        font-size: 1rem;
+        background-color: #E6E6EA;
+        color: #7daa87;
+        
+      }
+
+      &--addTask{
+        font-size: 1rem;
+        background-color:#4d7c57 ;
+        color:#E6E6EA;
+      }
     }
-  }
+  };
