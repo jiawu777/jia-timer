@@ -14,6 +14,10 @@ const Pomo = () => {
   const [timer, setTimer] = useState(0);
   const intervalIdTimer = useRef(null);
 
+  // forceUpdate
+  const[,setForceUpdate] = useState(0);
+  const forceUpdate = () => setForceUpdate((prev)=>prev+1);
+
   // setInput
   const timeInputRef = useRef(null)
   const taskInputRef = useRef(null)
@@ -24,6 +28,9 @@ const Pomo = () => {
     localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{ tasks: [], currentTaskId: null }
   )
   
+// taskId
+  const [taskId,setTaskId]=useState(userInfoRef.current.currentTaskId);
+
   // get current task
   const currentTaskIndex = userInfoRef.current?.tasks?.findIndex(
     (task) => task.id === userInfoRef.current?.currentTaskId
@@ -46,9 +53,15 @@ const Pomo = () => {
 
   // timer countdown func
   useEffect(() => {
-    if (timerSwitch && timer > 0) {
+    if (timerSwitch) {
       intervalIdTimer.current = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prevTimer) => {
+          if(prevTimer <= 0){
+            clearInterval(intervalIdTimer.current);
+            nextTask();
+            return 0;
+          }
+          return prevTimer - 1});
       }, 1000);
     } else {
       clearInterval(intervalIdTimer.current);
@@ -56,15 +69,46 @@ const Pomo = () => {
 
     // destroy
     return () => clearInterval(intervalIdTimer.current);
-  }, [timerSwitch, timer]);
+  }, [timerSwitch]);
 
-  // skip timer  
-  const resetTimer = () => {
+  // next task func
+  const nextTask = () => {
     clearInterval(intervalIdTimer.current);
-    if(currentTask){
-      setTimer(currentTask.time)
+
+    const { tasks, currentTaskId } = userInfoRef.current;
+
+    if(!tasks || tasks.length === 0 ){
+      console.log("No tasks available.");
+      return;
     }
-    setTimerSwitch(false);
+
+    const currentIndex = tasks.findIndex((task)=>task.id === currentTaskId)
+    if(currentIndex === -1){
+      console.log("Current task not found.");
+      return;
+    }
+
+    const nextTaskIndex = currentIndex +1;
+    console.log(userInfoRef.current)
+
+    if(nextTaskIndex < tasks.length){
+      const nextTask = tasks[nextTaskIndex];
+      if(!nextTask){
+        console.log("Next task undefined.");
+        return;
+      }
+
+      userInfoRef.current.currentTaskId = nextTask.id;
+      const nextTaskTime = nextTask.time;
+      setTimer(nextTaskTime);
+      setTimerSwitch(false);
+      localStorage.setItem('userInfo',JSON.stringify(userInfoRef.current))
+    }else{
+      console.log("No tasks available.");
+      setTimerSwitch(false);
+      setTimer(0);
+    }
+    
   };
 
   // input time & task
@@ -76,7 +120,7 @@ const Pomo = () => {
     const secInput = Number(timeInputRef.current.value)*60;
     const taskName = taskInputRef.current.value.trim();
 
-    if(!taskName) return
+    if(!taskName) return;
 
     const newTask = {
       id: userInfoRef.current.tasks.length+1,
@@ -86,6 +130,7 @@ const Pomo = () => {
 
     userInfoRef.current.tasks.push(newTask);
     userInfoRef.current.currentTaskId = newTask.id;
+    setTaskId(newTask.id);
     setTimer(secInput);
     setTimerSwitch(false);
 
@@ -96,13 +141,41 @@ const Pomo = () => {
 
   // Task List
   const forMapTasks = (item) => {
+    
+    const handleTaskSelection = (item)=>{
+      userInfoRef.current.currentTaskId = item.id;
+      setTaskId(item.id);
+      setTimer(item.time);
+      setTimerSwitch(false);
+      localStorage.setItem("userInfo",JSON.stringify(userInfoRef.current))
+    }
+
+    const handleTaskDeletion = () =>{
+      if(userInfoRef.current.currentTaskId === item.id){
+        nextTask();
+      }
+      userInfoRef.current.tasks = userInfoRef.current.tasks.filter((task)=>task.id !== item.id)
+      
+      if(userInfoRef.current.tasks.length <= 0){
+        userInfoRef.current.currentTaskId = 0;
+      }
+    localStorage.setItem("userInfo",JSON.stringify(userInfoRef.current));
+      setTimer(defaultTime*60);
+      setTimerSwitch(false);
+      clearInterval(intervalIdTimer.current);
+      forceUpdate();
+    }
+
       return(
         <li key={`${item.id}`} className="pomo__taskListLI" >
           <label className="pomo__taskListItem" for="pomo__taskListItem"> 
-            <input className="pomo__taskListItem pomo__taskListItem--radio" type="radio" name="listGroupRadio" value="" id="" checked/>
+            <input className="pomo__taskListItem pomo__taskListItem--radio" type="radio" name="listGroupRadio" value="" id="" 
+            checked={userInfoRef.current.currentTaskId === item.id}
+            onChange={()=>handleTaskSelection(item)}/>
             <div className="pomo__taskListItem pomo__taskListItem--time">{item.time/60}min</div>
             <div className="pomo__taskListItem pomo__taskListItem--task">{item.name}</div>
-            <button className="pomo__taskListItem pomo__taskListItem--closeBtn" type="button" class="btn-close" aria-label="Close"></button>
+            <button className="pomo__taskListItem pomo__taskListItem--closeBtn" type="button" class="btn-close" aria-label="Close"  
+            onClick={handleTaskDeletion}/>
             </label>
         </li>
       )
@@ -133,7 +206,7 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
 
         <button
           className={`pomo__btn ${timerSwitch ? 'pomo__btn--skip' : 'pomo__btn--hide'}`}
-          onClick={resetTimer}
+          onClick={nextTask}
         >
           {TimerSkip}
         </button>
