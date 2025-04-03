@@ -1,130 +1,70 @@
 .pomo {
-    &__wrapper {
-      padding: 5vh 0px;
-      gap: 5vh;
-      width: 100vw;
-      height: auto;
-      background-color: #7daa87;
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: center;
-      align-items: center;
-      &--start{
-      background-color: #FE4A49;
-      }
+    &__wrapper{
+        display: flex;
+        flex-flow: column nowrap;
+        flex-grow: 1;
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        height: auto;
+        padding: 50px;
+        gap: 20px;
+        background-color: #7daa87;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &--start{
+        background-color: #FE4A49;
+        }
     }
+  }
+.display {
+      &__wrapper{
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
   
-    &__display {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #E6E6EA;
-      flex-flow: column nowrap;
-    }
-
-    &__circular{
-      font-size: 20 rem;
-    }
-
-    &__currentTaskName{
-      display: flex;
-      justify-content: center;
-      max-width: 50%;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 2.5rem;
-      overflow: hidden;
-    }
-
-    &__input{
-      max-width: 50%;
-      display: flex;
-      flex-flow: column wrap;
-      text-align: center;
-      border-radius: 20px;
-
-      &--start{
-        display: none;
-      }
-      &--time{
-        background-color: #E6E6EA;
-        color: #4d7c57;
-      }
-      &--task{
-        background-color: #E6E6EA;
-        color: #4d7c57;
-      }
-      &::placeholder{
-        color: #4d7c57;
-      }
-    }
-
-    &__form{
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px;
-      gap: 10px;
-    }
-
-    &__taskList{
-      display: flex;
-      justify-content: center;
-      height: auto;
-    }
-
-    &__taskListUL{
-      display: flex;
-      flex-direction: column;
-      padding: 0px 20px;
-      margin: 0px;
-      gap: 10px 0px;
-    }
-
-    &__taskListLI{
-      list-style: none;
-    }
-
-    &__taskListItem{
-      width: 100%;
-      overflow: hidden;
-      font-size: 1rem;
-      font-weight: 500;
-      align-items: center;
-      padding: 0px 10px;
-      gap:10px 10px;
-      display: flex;
-      justify-content: space-between;
-      flex-flow: row nowrap;
-      &--radio{
+      &__circular{
+        width: 100%;
+        display: flex;
+        align-items: center;
         justify-content: center;
-        flex-basis: 5%;
+        color: #E6E6EA;
+        flex-flow: column nowrap;
+        font-size: 20 rem;
       }
-      &--time{
+      
+      &__currentTaskName{
+        display: flex;
         justify-content: center;
-        flex-basis: 20%;
-      }
-      &--task{
-        justify-content: center;
-        flex-basis: 70%;
+        width: 50%;
         text-overflow: ellipsis;
         white-space: nowrap;
-      }
-    }
-    
-    &__btn {
+        font-size: 2.5rem;
+        overflow: hidden;
+        margin: 0px;
+        }
+  }
+
+.switch{
+    &__wrapper{
       display: flex;
       flex-flow: row nowrap;
-      font-size: 2rem;
-      border-radius: 20px;
       gap: 0px 10px;
-      
+      padding: 20px 0px;
   
       @include mobile{
         font-size: 2.5rem;
         gap: 0px 20px;
       }
+    }
+
+    &__timer{
+      font-size: 2rem;
+      border-radius: 20px;
 
       &--start{
         box-shadow: 0px 0px 0px 5px 
@@ -133,11 +73,13 @@
         color: #7daa87;
         background-color: #E6E6EA;
       }
-
+  
       &--pause{
         background-color: red;
       }
-
+    }
+    
+    &__next{
       &--skip{
         display: flex;
         align-items: center;
@@ -148,18 +90,130 @@
       &--hide{
         display: none;
       }
+    }
+  }
+    
+.input{
+      &__wrapper{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column wrap;
+        text-align: center;
+        border-radius: 20px;
 
-      &--delBtn{
-        font-size: 1rem;
-        background-color: #E6E6EA;
-        color: #7daa87;
-        
+        &--start{
+          display: none;
+        }
+      }
+  
+      &__form{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        gap: 2px;  
+      }
+  
+      &__time{
+      background-color: #E6E6EA;
+      color: #4d7c57;
+      display: flex;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 1rem;
+        &::placeholder{
+          color: #4d7c57;
+        }
+      }
+    
+      &__task{
+      background-color: #E6E6EA;
+      color: #4d7c57;
+      display: flex;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 1rem;
+        &::placeholder{
+          color: #4d7c57;
+        }
       }
 
-      &--addTask{
+      &__addTaskBtn{
         font-size: 1rem;
         background-color:#4d7c57 ;
         color:#E6E6EA;
+        border-radius: 10px;
       }
-    }
-  };
+    
+  }
+
+.taskList{
+      &__wrapper{
+        width: 100%;
+        padding: 0px;
+        margin:0px;
+        justify-content: center;
+        align-items: center;
+        &--start{
+          display: none;
+        }
+      }
+
+      &__UL{
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 10px 0px;
+        padding: 0px;
+        margin: 0px;
+      }
+
+      &__LI{
+      width: 100%;
+      list-style: none;
+      flex-grow:1;
+      }
+
+      &__label{
+        display: flex;
+        height: auto;
+        width: 100%;
+        overflow: hidden;
+        font-size: 1rem;
+        font-weight: 500;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap:10px 10px;
+        flex-flow: row nowrap;
+      }
+
+      &__radio{
+        justify-content: center;
+        flex-basis: 5%;
+      }
+
+      &__time{
+        justify-content: center;
+        flex-basis: 20%;
+      }
+
+      &__taskName{
+        justify-content: center;
+        flex-basis: 50%;
+        max-width: 40%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &__delBtn{
+        justify-content: center;
+        flex-basis: 10%;
+        font-size: 1rem;
+        background-color: #E6E6EA;
+        color: #7daa87;
+        border-radius: 10px;
+      }
+  }

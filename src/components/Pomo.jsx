@@ -185,14 +185,14 @@ const Pomo = () => {
     }
 
       return(
-        <li key={`${item.id}`} className="pomo__taskListLI" >
-          <label className="pomo__taskListItem"> 
-            <input className="pomo__taskListItem pomo__taskListItem--radio" type="radio" name="listGroupRadio" value="" id="" 
+        <li key={`${item.id}`} className="taskList__LI" >
+          <label className="taskList__label"> 
+            <input className="taskList__radio" type="radio" name="listGroupRadio" value="" id="" 
             checked={userInfoRef.current.currentTaskId === item.id}
             onChange={()=>handleTaskSelection(item)}/>
-            <div className="pomo__taskListItem pomo__taskListItem--time">{item.time/60}min</div>
-            <div className="pomo__taskListItem pomo__taskListItem--task">{item.name}</div>
-            <button className="pomo__btn pomo__btn--delBtn" type="button" 
+            <div className="taskList__time">{item.time/60}min</div>
+            <div className="taskList__taskName">{item.name}</div>
+            <button className="taskList__delBtn" type="button" 
             onClick={handleTaskDeletion}>{delBtn}</button>
             </label>
         </li>
@@ -203,27 +203,27 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
 
   return (
     <div className={`pomo__wrapper ${timerSwitch ? 'pomo__wrapper--start' : ''}`}>
-      <div className="pomo__display">
+      <div className="display__wrapper">
         <CircularProgress
-          className="pomo__circular"
+          className="display__circular"
           timer={timer}
           timeInput={currentTask?.time||1500}
           size={CircularSize}
           strokeWidth={CircularStrokeWidth}
         ></CircularProgress>
-        <h2 className="pomo__currentTaskName">{currentTask?.name || 'Time to focus!'}</h2>
+        <h2 className="display__currentTaskName">{currentTask?.name || 'Time to focus!'}</h2>
       </div>
 
-      <div className="pomo__btn">
+      <div className="switch__wrapper">
         <button
-          className={`pomo__btn pomo__btn${timerSwitch ? '--pause' : '--start'}`}
+          className={`switch__timer ${timerSwitch ? 'switch__timer--pause' : 'switch__timer--start'}`}
           onClick={switchTimer}
         >
           {timerSwitch ? TimerStop : TimerStart}
         </button>
 
         <button
-          className={`pomo__btn ${timerSwitch ? 'pomo__btn--skip' : 'pomo__btn--hide'}`}
+          className={`switch__next ${timerSwitch ? 'switch__next--skip' : 'switch__next--hide'}`}
           onClick={nextTask}
         >
           {TimerSkip}
@@ -231,10 +231,10 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
 
       </div>
 
-      <div className={`"pomo__input" ${timerSwitch ? 'pomo__input--start' : ''}`}>
-        <form className="pomo__form">
+      <div className={`input__wrapper ${timerSwitch ? 'input__wrapper--start' : ''}`}>
+        <form className="input__form">
           <input
-            className="pomo__input pomo__input--time"
+            className="input__time"
             type="number"
             ref={timeInputRef}
             defaultValue={defaultTime}
@@ -242,25 +242,25 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
             required
           />
           <input
-            className="pomo__input pomo__input--task"
+            className="input__task"
             type="text"
             ref={taskInputRef}
             placeholder="Enter task"
             required
           />
           <button
-            className="pomo__btn pomo__btn--addTask"
+            className="input__addTaskBtn"
             onClick={handleTaskInput}
           >
             {addTaskBtn}
           </button>
         </form>
-        <div className="pomo__taskList">
-            <ul className="pomo__taskListUL">
+      </div>
+      <div className={`taskList__wrapper ${timerSwitch ? 'input__wrapper--start' : ''}`}>
+            <ul className="taskList__UL">
               {child}
             </ul>
-          </div>
-      </div>
+        </div>
     </div>
   );
 };
