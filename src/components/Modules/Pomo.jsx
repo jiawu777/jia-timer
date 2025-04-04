@@ -5,7 +5,7 @@ import './Pomo.scss';
 const Pomo = () => {
   // Config
   const [TimerStart, TimerStop, TimerSkip] = ['Start', 'Pause','Skip'];
-  const [CircularSize,CircularStrokeWidth] = [400, 50];
+  const [defaultCircularSize,defaultCircularStrokeWidth] = [400, 50];
   const [addTaskBtn ,delBtn] = ["Add task","del"];
   const defaultTask = " Time to focus! ";
   const defaultTime = 25;
@@ -21,17 +21,28 @@ const Pomo = () => {
   const[,setForceUpdate] = useState(0);
   const forceUpdate = () => setForceUpdate((prev)=>prev+1);
 
+  // get window size for circular
+  const [circularSize,setCircularSize]=useState(400)
+
+  useEffect(()=>{
+    const innerWidth = Math.floor(window.innerWidth);
+    if(innerWidth < 450){
+      const circularWidth = innerWidth*0.8;
+      setCircularSize(circularWidth);
+    }
+
+  },[])
+
   // setInput
   const timeInputRef = useRef(null)
   const taskInputRef = useRef(null)
-
 
   // get UserInfo
   const userInfoRef = useRef(
     localStorage.getItem('userInfo')?JSON.parse(localStorage.getItem('userInfo')):{ tasks: [], currentTaskId: null }
   )
   
-// taskId
+  // taskId
   const [,setTaskId]=useState(userInfoRef.current.currentTaskId);
 
   // get current task
@@ -207,9 +218,9 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
         <CircularProgress
           className="display__circular"
           timer={timer}
-          timeInput={currentTask?.time||1500}
-          size={CircularSize}
-          strokeWidth={CircularStrokeWidth}
+          timeInput={currentTask?.time || 1500 }
+          size={circularSize? circularSize : defaultCircularSize}
+          strokeWidth={circularSize? circularSize/8 : defaultCircularStrokeWidth}
         ></CircularProgress>
         <h2 className="display__currentTaskName">{currentTask?.name || 'Time to focus!'}</h2>
       </div>
@@ -256,7 +267,8 @@ const child = userInfoRef.current?.tasks?.map(forMapTasks) ?? [];
           </button>
         </form>
       </div>
-      <div className={`taskList__wrapper ${timerSwitch ? 'input__wrapper--start' : ''}`}>
+
+      <div className={`taskList__wrapper ${timerSwitch ? 'taskList__wrapper--start' : ''}`}>
             <ul className="taskList__UL">
               {child}
             </ul>
